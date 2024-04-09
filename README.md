@@ -1,68 +1,45 @@
 # Professional Ruby App
 
-This is a professional web application built using Ruby, Sinatra, and SQLite3. It demonstrates how to create a dynamic web app with a clean and responsive user interface using Bootstrap styling.
+This is a professional Ruby application that uses Sinatra and SQLite3 to create a web application with Bootstrap styling.
 
 ## Features
 
-- Navigation bar with links to the home page and a contact modal
-- Main container displaying a greeting message and a button to change the greeting
-- User list fetched from the SQLite3 database and displayed dynamically
-- Contact modal with a form for users to send messages
-- Responsive design using Bootstrap classes and custom CSS styles
+- **Bootstrap Styling**: The application uses Bootstrap for a clean and modern user interface.
+- **User List**: The application queries data from a SQLite3 database and displays a list of users.
+- **Contact Form**: The application includes a contact form in a modal dialog.
 
 ## Technologies Used
 
-- Ruby: The primary programming language used for server-side logic and database interactions.
-- Sinatra: A lightweight web framework for Ruby that allows easy creation of web applications.
-- SQLite3: A relational database management system used for storing and retrieving data.
-- HTML: The markup language used for structuring the web pages.
-- CSS: Used for styling the web pages and creating a visually appealing user interface.
-- Bootstrap: A popular CSS framework that provides pre-built components and responsive grid system.
-- JavaScript: Used for adding interactivity to the web pages, such as changing the greeting message.
+- **Ruby**: The application is written in Ruby.
+- **Sinatra**: Sinatra is used as the web application framework.
+- **SQLite3**: SQLite3 is used as the database for storing user data.
+- **Bootstrap**: Bootstrap is used for styling the web application.
 
 ## Database Connection
 
-The application connects to an SQLite3 database named `my_database.db`. The database connection is established in the `app.rb` file using the following code:
-
-```ruby
-db = SQLite3::Database.new 'my_database.db'
-# Setup_db.rb File
-
-The `setup_db.rb` file is responsible for creating the users table in the database and inserting some sample data. It can be run separately to initialize the database.
+The application connects to a SQLite3 database using the `sqlite3` gem. The database is set up in the `setup_db.rb` file, where a `users` table is created and populated with sample data.
 
 ## Project Structure
 
-- **app.rb:** The main application file that defines the routes and handles the database queries.
-- **views/index.erb:** The HTML template for the home page, which includes the navigation bar, main container, user list, and contact modal.
-- **setup_db.rb:** A script to set up the SQLite3 database and populate it with sample data.
-- **my_database.db:** The SQLite3 database file that stores the user data.
+The project consists of three main files:
+
+- `index.rb`: This is the main HTML file for the web application.
+- `app.rb`: This is the main Ruby file that sets up the Sinatra application and routes.
+- `setup_db.rb`: This file sets up the SQLite3 database.
 
 ## Getting Started
 
-1. Make sure you have Ruby and SQLite3 installed on your system.
-2. Clone this repository to your local machine.
-3. Navigate to the project directory in your terminal.
-4. Run `bundle install` to install the required dependencies.
-5. Run `ruby setup_db.rb` to set up the database and populate it with sample data.
-6. Run `ruby app.rb` to start the Sinatra server.
-7. Open your web browser and visit [http://localhost:4567](http://localhost:4567) to see the application in action.
+To get started with this project:
+
+1. Clone the repository.
+2. Install the required gems with `bundle install`.
+3. Set up the database with `ruby setup_db.rb`.
+4. Start the Sinatra application with `ruby app.rb`.
 
 ## Why This Project Is Useful
 
-This project serves as a great starting point for building professional web applications using Ruby and Sinatra. It demonstrates how to:
-
-- Create a dynamic web application with server-side rendering using Sinatra and ERB templates.
-- Connect to and interact with an SQLite3 database to store and retrieve data.
-- Use Bootstrap to create a responsive and visually appealing user interface.
-- Implement a contact form within a modal dialog.
-- Structure a Ruby web application with separate files for routes, views, and database setup.
-
-By exploring and extending this project, developers can learn how to build robust and interactive web applications using Ruby and popular web development technologies.
+This project serves as a great starting point for learning how to create a web application with Ruby and Sinatra. It demonstrates how to set up a SQLite3 database, how to query data from the database, and how to display the data in a web page.
 
 ## Contributing
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
-
-## License
-
-This project is open-source and available under the MIT License.
+Contributions to this project are welcome. Please fork the repository and create a pull request with your changes.
