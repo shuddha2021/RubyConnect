@@ -18,9 +18,6 @@ This is a professional Ruby application that uses Sinatra and SQLite3 to create 
 <img width="1868" alt="Screenshot 2024-04-09 at 1 07 05 PM" src="https://github.com/shuddha2021/RubyConnect/assets/81951239/64c10894-acde-4b4f-88dd-0483171ceb69">
 
 
-## Database Connection![Uploading Screenshot 2024-04-09 at 1.07.05 PM.png…]()
-
-
 The application connects to a SQLite3 database using the `sqlite3` gem. The database is set up in the `setup_db.rb` file, where a `users` table is created and populated with sample data.
 
 ## Project Structure
