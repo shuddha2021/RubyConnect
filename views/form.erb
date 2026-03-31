@@ -1,0 +1,30 @@
+<section class="form-section">
+  <h1><%= @user.is_a?(Hash) && @user['id'] ? 'Edit User' : 'New User' %></h1>
+
+  <form method="post" action="<%= @user.is_a?(Hash) && @user['id'] ? "/users/#{@user['id']}" : '/users' %>" class="user-form">
+    <div class="field">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" value="<%= h(@user.is_a?(Hash) ? (@user['name'] || @user[:name]) : '') %>" required maxlength="100" autofocus>
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" value="<%= h(@user.is_a?(Hash) ? (@user['email'] || @user[:email]) : '') %>" required>
+    </div>
+
+    <div class="field">
+      <label for="role">Role</label>
+      <select id="role" name="role">
+        <% role = @user.is_a?(Hash) ? (@user['role'] || @user[:role] || 'member') : 'member' %>
+        <option value="admin" <%= 'selected' if role == 'admin' %>>Admin</option>
+        <option value="member" <%= 'selected' if role == 'member' %>>Member</option>
+        <option value="viewer" <%= 'selected' if role == 'viewer' %>>Viewer</option>
+      </select>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary"><%= @user.is_a?(Hash) && @user['id'] ? 'Update' : 'Create' %> User</button>
+      <a href="/" class="btn btn-ghost">Cancel</a>
+    </div>
+  </form>
+</section>

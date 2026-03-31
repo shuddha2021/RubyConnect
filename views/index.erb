@@ -1,118 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Professional Ruby App</title>
-  <!-- Include Bootstrap CSS for styling -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
-      body {
-          background-color: #f8f9fa;
-      }
-      .navbar-custom {
-          background-color: #333;
-      }
-      .navbar-custom .navbar-brand,
-      .navbar-custom .navbar-nav .nav-link {
-          color: #fff;
-      }
-      .container {
-          margin-top: 50px;
-      }
-      .card {
-          margin-bottom: 20px;
-      }
-      .modal-header {
-          background-color: #007bff;
-          color: #fff;
-      }
-      /* Additional styles can be added here */
-  </style>
-</head>
-<body>
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-custom">
-  <a class="navbar-brand" href="#">MyApp</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#" data-toggle="modal" data-target="#contactModal">Contact</a>
-      </li>
-    </ul>
-  </div>
-</nav>
+<!-- Hero -->
+<section class="hero">
+  <h1>User Management</h1>
+  <p>Manage your team with ease. Search, create, edit, and remove users in one place.</p>
+</section>
 
-<!-- Main Container -->
-<div class="container">
-  <div class="card">
-    <div class="card-body">
-      <h1 class="card-title" id="greeting">Hello, World!</h1>
-      <p class="card-text">This is a more advanced web application with Bootstrap styling.</p>
-      <button class="btn btn-primary" onclick="changeGreeting()">Click Me!</button>
-    </div>
-  </div>
+<!-- KPI Strip -->
+<div class="kpi-strip">
+  <div class="kpi"><span class="kpi-val"><%= @stats[:total] %></span><span class="kpi-label">Total Users</span></div>
+  <div class="kpi"><span class="kpi-val"><%= @stats[:admins] %></span><span class="kpi-label">Admins</span></div>
+  <div class="kpi"><span class="kpi-val"><%= @stats[:members] %></span><span class="kpi-label">Members</span></div>
+  <div class="kpi"><span class="kpi-val"><%= @stats[:viewers] %></span><span class="kpi-label">Viewers</span></div>
+</div>
 
-  <!-- User List -->
-  <% if @users %>
-    <ul class="list-group">
-      <% @users.each do |user| %>
-        <li class="list-group-item">
-          <%= user[1] %> - <%= user[2] %>
-        </li>
+<!-- Toolbar -->
+<div class="toolbar">
+  <form method="get" action="/" class="search-form">
+    <input type="search" name="q" value="<%= h(@search) %>" placeholder="Search users..." class="search-input" aria-label="Search users">
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+    <% unless @search.empty? %>
+      <a href="/" class="btn btn-ghost btn-sm">Clear</a>
+    <% end %>
+  </form>
+  <div class="toolbar-actions">
+    <a href="/users/new" class="btn btn-primary">+ New User</a>
+    <button class="btn btn-ghost" id="contactBtn">Contact</button>
+  </div>
+</div>
+
+<!-- User Table -->
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Created</th>
+        <th class="text-right">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @users.empty? %>
+        <tr>
+          <td colspan="6" class="empty-state">
+            <% if @search.empty? %>
+              No users yet. <a href="/users/new">Create one</a>.
+            <% else %>
+              No results for "<%= h(@search) %>". <a href="/">Clear search</a>.
+            <% end %>
+          </td>
+        </tr>
+      <% else %>
+        <% @users.each do |user| %>
+          <tr>
+            <td class="mono"><%= user['id'] %></td>
+            <td class="name-cell"><%= h(user['name']) %></td>
+            <td class="mono"><%= h(user['email']) %></td>
+            <td><span class="badge badge-<%= user['role'] %>"><%= user['role'] %></span></td>
+            <td class="mono"><%= user['created_at'] %></td>
+            <td class="text-right actions-cell">
+              <a href="/users/<%= user['id'] %>/edit" class="btn btn-sm btn-ghost">Edit</a>
+              <form method="post" action="/users/<%= user['id'] %>/delete" class="inline-form" onsubmit="return confirm('Delete <%= h(user['name']) %>?')">
+                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
-    </ul>
-  <% end %>
+    </tbody>
+  </table>
 </div>
 
-<!-- Contact Modal -->
-<div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="contactModalLabel">Contact Us</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Enter your name">
-          </div>
-          <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" placeholder="Enter your email">
-          </div>
-          <div class="form-group">
-            <label for="message">Message</label>
-            <textarea class="form-control" id="message" rows="3"></textarea>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Send Message</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Scripts -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.9/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    function changeGreeting() {
-        document.getElementById('greeting').textContent = 'Hello, Professional World!';
-    }
-</script>
-</body>
-</html>
+<!-- Pagination -->
+<% if @total_pages > 1 %>
+  <nav class="pagination" aria-label="Pages">
+    <% if @page > 1 %>
+      <a href="/?page=<%= @page - 1 %><%= @search.empty? ? '' : "&q=#{h(@search)}" %>" class="btn btn-sm btn-ghost">&larr; Prev</a>
+    <% end %>
+    <span class="page-info">Page <%= @page %> of <%= @total_pages %></span>
+    <% if @page < @total_pages %>
+      <a href="/?page=<%= @page + 1 %><%= @search.empty? ? '' : "&q=#{h(@search)}" %>" class="btn btn-sm btn-ghost">Next &rarr;</a>
+    <% end %>
+  </nav>
+<% end %>

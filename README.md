@@ -1,46 +1,114 @@
-# Professional Ruby App
+# RubyConnect
 
-This is a professional Ruby application that uses Sinatra and SQLite3 to create a web application with Bootstrap styling.
+A full-featured user management web application built with Ruby, Sinatra, and SQLite3. Modern UI, full CRUD, search & pagination, role-based badges, contact form, dark/light theme, JSON API, and comprehensive test suite — all with zero JavaScript frameworks.
+
+![Ruby](https://img.shields.io/badge/Ruby-3.x-CC342D?logo=ruby&logoColor=fff)
+![Sinatra](https://img.shields.io/badge/Sinatra-4.0-000?logo=ruby&logoColor=fff)
+![License](https://img.shields.io/badge/License-MIT-blue)
+![Status](https://img.shields.io/badge/status-active-brightgreen)
 
 ## Features
 
-- **Bootstrap Styling**: The application uses Bootstrap for a clean and modern user interface.
-- **User List**: The application queries data from a SQLite3 database and displays a list of users.
-- **Contact Form**: The application includes a contact form in a modal dialog.
+| Feature | Description |
+|---|---|
+| **Full CRUD** | Create, read, update, and delete users with server-side validation |
+| **Search** | Real-time search across names and emails with result counts |
+| **Pagination** | Automatic page splitting for large user lists |
+| **Role Badges** | Color-coded admin / member / viewer role badges |
+| **KPI Dashboard** | At-a-glance stats strip — total users, admins, members, viewers |
+| **Contact Form** | Modal contact form that persists messages to the database |
+| **Dark / Light Theme** | System-aware toggle, persisted in localStorage |
+| **JSON API** | RESTful API endpoints for programmatic access |
+| **Input Validation** | Server-side name, email, and duplicate checks |
+| **Flash Messages** | Auto-dismissing success/error notifications |
+| **Responsive** | Mobile-first layout; table columns hide gracefully on small screens |
+| **Zero JS Frameworks** | Vanilla CSS + JS — no Bootstrap, no jQuery, no build step |
+| **Test Suite** | 25+ Minitest tests covering routes, database, and edge cases |
 
-## Technologies Used
+## Architecture
 
-- **Ruby**: The application is written in Ruby.
-- **Sinatra**: Sinatra is used as the web application framework.
-- **SQLite3**: SQLite3 is used as the database for storing user data.
-- **Bootstrap**: Bootstrap is used for styling the web application.
-
-<img width="1868" alt="Screenshot 2024-04-09 at 1 07 05 PM" src="https://github.com/shuddha2021/RubyConnect/assets/81951239/64c10894-acde-4b4f-88dd-0483171ceb69">
-
-
-The application connects to a SQLite3 database using the `sqlite3` gem. The database is set up in the `setup_db.rb` file, where a `users` table is created and populated with sample data.
-
-## Project Structure
-
-The project consists of three main files:
-
-- `index.rb`: This is the main HTML file for the web application.
-- `app.rb`: This is the main Ruby file that sets up the Sinatra application and routes.
-- `setup_db.rb`: This file sets up the SQLite3 database.
+```
+app.rb              ← Sinatra routes (web + API), helpers, config
+config.ru           ← Rack entry point (for Puma / deployment)
+Gemfile             ← Dependencies
+Rakefile            ← Database setup task
+setup_db.rb         ← Quick seed script
+lib/
+  database.rb       ← Thread-safe SQLite3 wrapper, all queries
+views/
+  layout.erb        ← HTML shell, nav, footer, contact modal
+  index.erb         ← Dashboard: KPIs, toolbar, table, pagination
+  form.erb          ← New / edit user form
+  not_found.erb     ← 404 page
+public/
+  style.css         ← Full design system (CSS custom properties)
+  app.js            ← Theme toggle, modal, alert auto-dismiss
+test/
+  app_test.rb       ← Integration tests (Rack::Test)
+  database_test.rb  ← Unit tests for Database module
+```
 
 ## Getting Started
 
-To get started with this project:
+### Prerequisites
 
-1. Clone the repository.
-2. Install the required gems with `bundle install`.
-3. Set up the database with `ruby setup_db.rb`.
-4. Start the Sinatra application with `ruby app.rb`.
+- **Ruby 3.x** — [install](https://www.ruby-lang.org/en/downloads/)
+- **Bundler** — `gem install bundler`
 
-## Why This Project Is Useful
+### Install & Run
 
-This project serves as a great starting point for learning how to create a web application with Ruby and Sinatra. It demonstrates how to set up a SQLite3 database, how to query data from the database, and how to display the data in a web page.
+```bash
+git clone https://github.com/shuddha2021/RubyConnect.git
+cd RubyConnect
+bundle install
+ruby setup_db.rb        # creates & seeds the database
+ruby app.rb             # starts server on http://localhost:4567
+```
 
-## Contributing
+### Run Tests
 
-Contributions to this project are welcome. Please fork the repository and create a pull request with your changes.
+```bash
+bundle exec ruby test/app_test.rb
+bundle exec ruby test/database_test.rb
+```
+
+## API Reference
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/users` | All users (JSON array) |
+| `GET` | `/api/users/:id` | Single user by ID |
+| `GET` | `/api/stats` | Dashboard statistics |
+
+### Example
+
+```bash
+curl http://localhost:4567/api/users | jq
+curl http://localhost:4567/api/stats | jq
+```
+
+## Web Routes
+
+| Method | Path | Description |
+|---|---|---|
+| `GET` | `/` | Dashboard with search & pagination |
+| `GET` | `/users/new` | New user form |
+| `POST` | `/users` | Create user |
+| `GET` | `/users/:id/edit` | Edit user form |
+| `POST` | `/users/:id` | Update user |
+| `POST` | `/users/:id/delete` | Delete user |
+| `POST` | `/contact` | Submit contact message |
+
+## Customization
+
+| Option | File | What to change |
+|---|---|---|
+| Port | `app.rb` | Set `PORT` env var or edit `set :port` |
+| Theme colors | `public/style.css` | Edit CSS custom properties in `:root` |
+| Seed data | `lib/database.rb` | Edit the `seed!` method |
+| Roles | `lib/database.rb` + `app.rb` | Add to the CHECK constraint + validation arrays |
+| Pagination size | `app.rb` | Change `per = 10` |
+
+## License
+
+MIT
